@@ -1,0 +1,389 @@
+{% extends 'restaurant_app/base_restaurant_dashboard.html' %}
+{% load static %}
+
+{% block title %}Manage Menu - {{ restaurant.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .mm-menu-management {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1.5rem 0.5rem;
+    }
+
+    .mm-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .mm-header h1 {
+        font-size: var(--h1-size, 2rem);
+        color: var(--text-color, #333);
+    }
+
+    .mm-btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        background-color: var(--accent-color);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .mm-btn-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
+    .mm-category-section {
+        margin-bottom: 3rem;
+    }
+
+    .mm-category-section h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: var(--h2-size, 1.5rem);
+        color: var(--text-color, #333);
+        margin-bottom: 1.5rem;
+        padding-left: 1rem;
+        border-left: 4px solid var(--accent-color);
+    }
+
+    .mm-menu-items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 16px;
+        padding: 1rem 0;
+    }
+
+    .mm-menu-item-card {
+        max-width: 240px;
+        width: 100%;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin: 0 auto;
+    }
+
+    .mm-menu-item-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .mm-menu-item-image {
+        position: relative;
+        width: 100%;
+        height: 150px;
+        background-color: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mm-menu-item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 4px;
+        background-color: #fff;
+    }
+
+    .mm-menu-item-image .mm-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #9ca3af;
+    }
+
+    .mm-status-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 16px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #fff;
+    }
+
+    .mm-status-badge.available {
+        background-color: #22c55e;
+    }
+
+    .mm-status-badge.unavailable {
+        background-color: #ef4444;
+    }
+
+    .mm-menu-item-details {
+        padding: 1rem;
+    }
+
+    .mm-menu-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+    }
+
+    .mm-menu-item-header h3 {
+        font-size: 1.1rem;
+        line-height: 1.3;
+        margin: 0;
+        color: var(--text-color, #333);
+    }
+
+    .mm-category-tag {
+        background-color: #f3f4f6;
+        padding: 0.2rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        color: #4b5563;
+    }
+
+    .mm-menu-item-description {
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+    }
+
+    .mm-menu-item-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.625rem;
+        padding-top: 0.625rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .mm-price {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--accent-color);
+    }
+
+    .mm-action-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .mm-btn-icon {
+        background: none;
+        border: none;
+        padding: 0.4rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-radius: 8px;
+    }
+
+    .mm-btn-icon:hover {
+        background-color: #f3f4f6;
+    }
+
+    .mm-btn-icon i {
+        font-size: 1.1rem;
+    }
+
+    .mm-btn-icon .fa-edit {
+        color: #3b82f6;
+    }
+
+    .mm-btn-icon .fa-toggle-on {
+        color: #22c55e;
+    }
+
+    .mm-btn-icon .fa-toggle-off {
+        color: #9ca3af;
+    }
+
+    .mm-btn-icon .fa-trash {
+        color: #ef4444;
+    }
+
+    .mm-no-items {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .mm-no-items p {
+        color: #6b7280;
+        font-size: var(--body-size, 1rem);
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="mm-menu-management">
+    <div class="mm-header">
+        <h1>Menu Management</h1>
+        <a href="{% url 'restaurant:add_menu_item' %}" class="mm-btn-primary">
+            <i class="fas fa-plus"></i> Add New Item
+        </a>
+    </div>
+
+    {% for category, items in categorized_items.items %}
+    <div class="mm-category-section">
+        <h2>{{ category }}</h2>
+        <div class="mm-menu-items-grid">
+            {% for item in items %}
+            <div class="mm-menu-item-card">
+                <div class="mm-menu-item-image">
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" 
+                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'mm-placeholder\'><i class=\'fas fa-utensils\'></i><span>No image available</span></div>'">
+                    {% else %}
+                        <div class="mm-placeholder">
+                            <i class="fas fa-utensils"></i>
+                            <span>No image available</span>
+                        </div>
+                    {% endif %}
+                    <span class="mm-status-badge {% if item.is_available %}available{% else %}unavailable{% endif %}">
+                        {{ item.is_available|yesno:"Available,Unavailable" }}
+                    </span>
+                </div>
+                <div class="mm-menu-item-details">
+                    <div class="mm-menu-item-header">
+                        <h3>{{ item.name }}</h3>
+                        {% if item.sub_category %}
+                        <span class="mm-category-tag">{{ item.sub_category }}</span>
+                        {% endif %}
+                    </div>
+                    <p class="mm-menu-item-description">{{ item.description|truncatechars:100 }}</p>
+                    <div class="mm-menu-item-footer">
+                        <span class="mm-price">₹{{ item.price }}</span>
+                        <div class="mm-action-buttons">
+                            <a href="{% url 'restaurant:edit_menu_item' item_id=item.id %}" class="mm-btn-icon" title="Edit Item">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="mm-btn-icon" title="Toggle Availability" onclick="toggleAvailability('{{ item.id }}', this)">
+                                <i class="fas fa-toggle-{{ item.is_available|yesno:'on,off' }}"></i>
+                            </button>
+                            <button class="mm-btn-icon delete" title="Delete Item" onclick="deleteMenuItem('{{ item.id }}', this)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="mm-no-items">
+        <p>No menu items added yet. Click "Add New Item" to get started.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+async function toggleAvailability(itemId, button) {
+    try {
+        const response = await fetch(`/restaurant/toggle-menu-item/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const icon = button.querySelector('i');
+            const badge = button.closest('.mm-menu-item-card').querySelector('.mm-status-badge');
+            
+            icon.className = `fas fa-toggle-${data.is_available ? 'on' : 'off'}`;
+            badge.textContent = data.is_available ? 'Available' : 'Unavailable';
+            badge.className = `mm-status-badge ${data.is_available ? 'available' : 'unavailable'}`;
+            
+            showToast(data.message, 'success');
+        } else {
+            showToast(data.message || 'Failed to update availability', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred while updating availability', 'error');
+    }
+}
+
+async function deleteMenuItem(itemId, button) {
+    if (!confirm('Are you sure you want to delete this menu item?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/restaurant/delete-menu-item/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const menuItemCard = button.closest('.mm-menu-item-card');
+            const categorySection = menuItemCard.closest('.mm-category-section');
+            
+            menuItemCard.remove();
+            
+            // If no more items in category, remove the category section
+            if (categorySection.querySelectorAll('.mm-menu-item-card').length === 0) {
+                categorySection.remove();
+            }
+            
+            showToast(data.message, 'success');
+            
+            // If no more categories, show the empty state
+            if (document.querySelectorAll('.mm-category-section').length === 0) {
+                const menuManagement = document.querySelector('.mm-menu-management');
+                menuManagement.innerHTML += `
+                    <div class="mm-no-items">
+                        <p>No menu items added yet. Click "Add New Item" to get started.</p>
+                    </div>
+                `;
+            }
+        } else {
+            showToast(data.message || 'Failed to delete item', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred while deleting the item', 'error');
+    }
+}
+
+function showToast(message, type = 'success') {
+    // You can implement your own toast notification here
+    // For now, we'll use a simple alert
+    alert(message);
+}
+</script>
+{% endblock %} 

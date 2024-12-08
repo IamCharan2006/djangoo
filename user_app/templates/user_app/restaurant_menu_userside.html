@@ -1,0 +1,131 @@
+{% extends 'ProjectHomePage.html' %}
+{% load static %}
+
+{% block title %}{{ restaurant.name }} - FoodieExpress{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/restaurant-detail.css' %}">
+{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block main_content %}
+<div class="restaurant-detail-page">
+    <!-- Restaurant Hero Section -->
+    <div class="restaurant-hero">
+        <div class="hero-background" style="background-image: url('{{ restaurant.image.url }}')"></div>
+        <div class="hero-content">
+            <div class="restaurant-info">
+                <h1>{{ restaurant.name }}</h1>
+                <p class="cuisines">{{ restaurant.specialties }}</p>
+                <div class="restaurant-meta">
+                    <span><i class="fas fa-star"></i> {{ restaurant.rating }} ({{ restaurant.total_ratings }})</span>
+                    <span><i class="fas fa-clock"></i> {{ restaurant.preparation_time }} mins</span>
+                    <span><i class="fas fa-motorcycle"></i> ₹{{ restaurant.delivery_fee }} delivery</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="container">
+        <div class="content-wrapper">
+            <!-- Menu Categories -->
+            <div class="menu-sidebar">
+                <div class="menu-categories">
+                    <h3>Menu</h3>
+                    <ul>
+                        {% for category in menu_categories %}
+                        <li>
+                            <a href="#category-{{ category.id }}" class="category-link">
+                                {{ category.name }}
+                                <span class="item-count">{{ category.menu_items.count }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="menu-content">
+                <!-- Search Bar -->
+                <div class="menu-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="menuSearch" placeholder="Search for dishes...">
+                </div>
+
+                <!-- Menu Categories -->
+                {% for category in menu_categories %}
+                <div id="category-{{ category.id }}" class="menu-category">
+                    <h2>{{ category.name }}</h2>
+                    <div class="menu-items">
+                        {% for item in category.menuitem_set.all %}
+                        <div class="menu-item" data-name="{{ item.name|lower }}" data-category="{{ category.name|lower }}">
+                            <div class="item-details">
+                                <div class="item-info">
+                                    {% if item.is_veg %}
+                                    <span class="veg-badge"><i class="fas fa-leaf"></i></span>
+                                    {% else %}
+                                    <span class="non-veg-badge"><i class="fas fa-drumstick-bite"></i></span>
+                                    {% endif %}
+                                    <h3>{{ item.name }}</h3>
+                                    <p class="price">₹{{ item.price }}</p>
+                                    <p class="description">{{ item.description }}</p>
+                                </div>
+                                <div class="item-image">
+                                    {% if item.image %}
+                                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="add-to-cart-btn"
+                                        data-item-id="{{ item.id }}"
+                                        data-item-name="{{ item.name }}"
+                                        data-item-price="{{ item.price }}"
+                                        data-item-image="{% if item.image %}{{ item.image.url }}{% endif %}">
+                                    <span class="price">₹{{ item.price }}</span>
+                                    <span class="add-text">ADD</span>
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Cart Sidebar -->
+            <div class="cart-sidebar">
+                <div class="cart-container">
+                    <div class="cart-header">
+                        <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+                        <span class="cart-count">0 items</span>
+                    </div>
+                    <div class="cart-items">
+                        <!-- Cart items will be added here dynamically -->
+                    </div>
+                    <div class="cart-footer">
+                        <div class="subtotal">
+                            <span>Subtotal:</span>
+                            <span class="amount">₹0.00</span>
+                        </div>
+                        <button class="checkout-btn"
+                            id="checkoutButton"
+                            data-url="{% url 'order_app:paypal_payment' %}">
+                            Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/restaurant-detail.js' %}"></script>
+{% endblock %}

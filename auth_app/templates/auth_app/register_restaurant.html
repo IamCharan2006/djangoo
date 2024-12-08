@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodieExpress - Restaurant Registration</title>
+    {% load static %}
+    {% load custom_filters %}
+    <link rel="stylesheet" href="{% static 'css/restaurant_registration.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Navbar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include 'NavBar/HomePageNavBar.html' %}
+    
+    <div class="page-wrapper">
+        <div class="login-container">
+            <!-- Left side: Brand -->
+            <div class="brand-section">
+                <div class="brand-content">
+                    <h1>FoodieExpress</h1>
+                    <p class="tagline">Partner with us and grow your business</p>
+                    <div class="features">
+                        <div class="feature-item">
+                            <span class="feature-icon">🚀</span>
+                            <p>Expand your reach</p>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📈</span>
+                            <p>Boost your sales</p>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">💫</span>
+                            <p>Easy management</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right side: Form -->
+            <div class="form-section">
+                <div class="form-container">
+                    <div class="registration-progress">
+                        <div class="progress-bar">
+                            <div class="progress" style="width: {{ current_step|multiply:25 }}%"></div>
+                        </div>
+                        <div class="steps">
+                            <div class="step {% if current_step >= 0 %}active{% endif %}">
+                                <span class="step-number">1</span>
+                                <p>Account Setup</p>
+                            </div>
+                            <div class="step {% if current_step >= 1 %}active{% endif %}">
+                                <span class="step-number">2</span>
+                                <p>Basic Information</p>
+                            </div>
+                            <div class="step {% if current_step >= 2 %}active{% endif %}">
+                                <span class="step-number">3</span>
+                                <p>Legal Documents</p>
+                            </div>
+                            <div class="step {% if current_step >= 3 %}active{% endif %}">
+                                <span class="step-number">4</span>
+                                <p>Operating Hours</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if current_step == 0 %}
+                    <form method="POST" class="restaurant-form">
+                        {% csrf_token %}
+                        <div class="form-content">
+                            <h2>Create Your Account</h2>
+                            {% if form.errors %}
+                                <div class="alert alert-error">
+                                    {{ form.errors }}
+                                </div>
+                            {% endif %}
+                            <div class="form-group">
+                                <label for="username">Username*</label>
+                                <input type="text" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address*</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password1">Password*</label>
+                                <input type="password" id="password1" name="password1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password2">Confirm Password*</label>
+                                <input type="password" id="password2" name="password2" required>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Next</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+
+                    {% if current_step == 1 %}
+                    <form method="POST" class="restaurant-form">
+                        {% csrf_token %}
+                        <div class="form-content">
+                            <h2>Basic Information</h2>
+                            {% if form.errors %}
+                                <div class="alert alert-error">
+                                    {{ form.errors }}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="form-group">
+                                <label for="name">Restaurant Name*</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="address">Restaurant Address*</label>
+                                <textarea id="address" name="address" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="city">City*</label>
+                                <select id="city" name="city" required>
+                                    <option value="">Select City</option>
+                                    {% for value, label in form.fields.city.choices %}
+                                        {% if value %}
+                                            <option value="{{ value }}">{{ label }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone">Phone Number*</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Business Email*</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cuisine_type">Cuisine Type*</label>
+                                <select id="cuisine_type" name="cuisine_type" required>
+                                    <option value="">Select Cuisine Type</option>
+                                    {% for value, label in form.fields.cuisine_type.choices %}
+                                        {% if value %}
+                                            <option value="{{ value }}">{{ label }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="description">Restaurant Description</label>
+                                <textarea id="description" name="description" placeholder="Tell us about your restaurant, specialties, and what makes it unique..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="restaurant_image">Restaurant Image</label>
+                                <input type="file" name="restaurant_image" id="restaurant_image" accept="image/*">
+                                <p class="help-text">Upload a logo or main image of your restaurant</p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="restaurant_banner">Restaurant Banner</label>
+                                <input type="file" name="restaurant_banner" id="restaurant_banner" accept="image/*">
+                                <p class="help-text">Upload a banner image for your restaurant page</p>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="window.history.back()">Previous</button>
+                                <button type="submit" class="btn-primary">Next</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+
+                    {% if current_step == 2 %}
+                    <form method="POST" enctype="multipart/form-data" class="restaurant-form">
+                        {% csrf_token %}
+                        <div class="form-content">
+                            <h2>Legal Documents</h2>
+                            <p class="info-text">All fields are optional during development.</p>
+                            
+                            <div class="form-group">
+                                <label for="business_license">Business License (Optional)</label>
+                                <input type="file" id="business_license" name="business_license">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="food_license">Food License</label>
+                                <input type="file" id="food_license" name="food_license">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="owner_id_proof">Owner ID Proof</label>
+                                <input type="file" id="owner_id_proof" name="owner_id_proof">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="gstin_number">GSTIN Number</label>
+                                <input type="text" id="gstin_number" name="gstin_number">
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="window.history.back()">Previous</button>
+                                <button type="button" class="btn-skip" onclick="skipStep()">Skip for Now</button>
+                                <button type="submit" class="btn-primary">Next</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <script>
+                    function skipStep() {
+                        // Create a form and submit it programmatically with skip=true
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = window.location.href;
+                        
+                        // Add CSRF token
+                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                        const csrfInput = document.createElement('input');
+                        csrfInput.type = 'hidden';
+                        csrfInput.name = 'csrfmiddlewaretoken';
+                        csrfInput.value = csrfToken;
+                        form.appendChild(csrfInput);
+                        
+                        // Add skip parameter
+                        const skipInput = document.createElement('input');
+                        skipInput.type = 'hidden';
+                        skipInput.name = 'skip_documents';
+                        skipInput.value = 'true';
+                        form.appendChild(skipInput);
+                        
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                    </script>
+                    {% endif %}
+
+                    {% if current_step == 3 %}
+                    <form method="POST" class="restaurant-form">
+                        {% csrf_token %}
+                        <div class="form-content">
+                            <h2>Operating Hours</h2>
+                            <p class="form-subtitle">Set your restaurant's operating hours and delivery radius</p>
+
+                            {% if form.errors %}
+                                <div class="alert alert-error">
+                                    {{ form.errors }}
+                                </div>
+                            {% endif %}
+
+                            <div class="form-group time-group">
+                                <div class="time-input">
+                                    <label for="opening_time">Opening Time*</label>
+                                    <input type="time" id="opening_time" name="opening_time" required>
+                                </div>
+                                
+                                <div class="time-input">
+                                    <label for="closing_time">Closing Time*</label>
+                                    <input type="time" id="closing_time" name="closing_time" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="delivery_radius">Delivery Radius (in km)*</label>
+                                <div class="radius-input">
+                                    <input type="number" id="delivery_radius" name="delivery_radius" 
+                                           min="1" max="50" step="0.5" required>
+                                    <span class="unit">km</span>
+                                </div>
+                                <p class="help-text">Maximum distance you can deliver from your restaurant location</p>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="window.history.back()">Previous</button>
+                                <button type="submit" class="btn-primary">Complete Registration</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+
+                    {% if user.is_authenticated and current_step > 0 %}
+                    <div class="user-status">
+                        <p>Logged in as: {{ user.username }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

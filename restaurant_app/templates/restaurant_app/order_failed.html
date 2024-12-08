@@ -1,0 +1,12 @@
+{% extends 'ProjectHomePage.html' %}
+{% block title %}Order Failed - FoodieExpress{% endblock %}
+
+{% block main_content %}
+<div class="container">
+    <div class="order-status">
+        <h2>Order Failed</h2>
+        <p>There was an issue with your payment. Please try again or contact support if the problem persists.</p>
+        <a href="{% url 'customer_app:cart' %}" class="btn btn-primary">Return to Cart</a>
+    </div>
+</div>
+{% endblock %}

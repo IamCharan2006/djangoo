@@ -1,0 +1,79 @@
+{% extends 'ProjectHomePage.html' %}
+{% load static %}
+
+{% block title %}FoodieExpress - Order Confirmed{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/order_confirmation.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<section class="confirmation-page">
+    <div class="confirmation-container">
+        <div class="confirmation-header">
+            <i class="fas fa-check-circle"></i>
+            <h1>Order Confirmed!</h1>
+            <p>Thank you for your order. Your food is being prepared with care.</p>
+        </div>
+
+        <div class="order-details">
+            <h2>Order Details</h2>
+            <div class="order-info">
+                <div class="info-item">
+                    <span class="label">Order Number:</span>
+                    <span class="value">#{{ order.order_number }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Estimated Delivery:</span>
+                    <span class="value">{{ order.estimated_delivery_time }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Delivery Address:</span>
+                    <span class="value">{{ order.delivery_address }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div class="order-items">
+                {% for item in order.items.all %}
+                <div class="summary-item">
+                    <div class="item-info">
+                        <span class="item-quantity">{{ item.quantity }}x</span>
+                        <span class="item-name">{{ item.menu_item.name }}</span>
+                    </div>
+                    <span class="item-price">₹{{ item.get_total }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="order-total">
+                <div class="total-item">
+                    <span>Subtotal</span>
+                    <span>₹{{ order.get_subtotal }}</span>
+                </div>
+                <div class="total-item">
+                    <span>Delivery Fee</span>
+                    <span>₹{{ order.delivery_fee }}</span>
+                </div>
+                <div class="total-item final">
+                    <span>Total</span>
+                    <span>₹{{ order.get_total }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="confirmation-actions">
+            <a href="{% url 'order:track_order' order.id %}" class="track-btn">
+                <i class="fas fa-map-marker-alt"></i>
+                Track Order
+            </a>
+            <a href="{% url 'restaurants' %}" class="browse-btn">
+                <i class="fas fa-utensils"></i>
+                Browse More Restaurants
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %} 

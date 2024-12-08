@@ -1,0 +1,256 @@
+/* Restaurant Page Layout */
+.restaurants-page {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    background-color: var(--bg-color);
+}
+
+/* Header Section */
+.restaurants-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.restaurants-header h1 {
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.restaurants-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+/* Search and Filter Section */
+.restaurant-filters {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.search-box input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-box input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+.filter-options {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cuisine-filter,
+.sort-filter {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: var(--white);
+    cursor: pointer;
+}
+
+.filter-submit {
+    padding: 0.8rem 2rem;
+    background: var(--accent-color);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-submit:hover {
+    background: #ff3333;
+    transform: translateY(-2px);
+}
+
+/* Restaurant Grid */
+.restaurants-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Restaurant Card */
+.restaurant-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Restaurant Image */
+.restaurant-image {
+    width: 100%;
+    height: 200px;
+    background: #f5f5f5;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.restaurant-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Restaurant Header */
+.restaurant-header {
+    margin-top: 1rem;
+}
+
+.restaurant-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Restaurant Badges */
+.restaurant-badges {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.badge {
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.badge.closed {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.badge.open {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.badge.rating {
+    background-color: #ffd700;
+    color: var(--text-primary);
+}
+
+/* Restaurant Meta */
+.restaurant-meta {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.meta-item i {
+    color: var(--accent-color);
+    font-size: 1.1rem;
+}
+
+.rupee-symbol {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+/* No Results State */
+.no-restaurants {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.no-restaurants i {
+    font-size: 3rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.no-restaurants h2 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.no-restaurants p {
+    color: var(--text-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .restaurants-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .restaurants-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .restaurants-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .restaurants-page {
+        padding: 0 1rem;
+    }
+}

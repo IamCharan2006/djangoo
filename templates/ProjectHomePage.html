@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FoodieExpress - Delicious Food Delivered{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/ProjectHomePage.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Navbar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% include 'NavBar/HomePageNavBar.html' %}
+    {% include 'chatbot_app/chatbot.html' %}
+    {% block hero %}
+    <!-- Hero Section -->
+    <section class="project-hero">
+        <div class="project-hero-content">
+            <h1>Delicious Food Delivered To Your Door</h1>
+            <p>Experience the finest restaurants in your city, delivered fresh</p>
+            <div class="project-search-container">
+                <div class="project-search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for restaurants or cuisines...">
+                    {% if user.is_authenticated %}
+                        <button class="project-btn-search">Find Food</button>
+                    {% else %}
+                        <a href="{% url 'auth:login' %}" class="project-btn-search">Login to Order</a>
+                    {% endif %}
+                </div>
+                <div class="popular-searches">
+                    <span>Popular:</span>
+                    <a href="#">Pizza</a>
+                    <a href="#">Sushi</a>
+                    <a href="#">Burgers</a>
+                    <a href="#">Indian</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endblock %}
+
+    {% block main_content %}
+    {% block featured_categories %}
+    <!-- Featured Categories -->
+    <section class="project-categories">
+        <div class="project-section-header">
+            <h2>Explore Categories</h2>
+            <a href="#" class="view-all">Browse All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="project-categories-grid">
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-hamburger"></i></div>
+                <h3>Fast Food</h3>
+                <p>20+ restaurants</p>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-pizza-slice"></i></div>
+                <h3>Pizza</h3>
+                <p>15+ restaurants</p>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-fish"></i></div>
+                <h3>Sushi</h3>
+                <p>10+ restaurants</p>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-ice-cream"></i></div>
+                <h3>Desserts</h3>
+                <p>25+ restaurants</p>
+            </div>
+            <!-- Add more category cards as needed -->
+        </div>
+    </section>
+    {% endblock %}
+
+    {% block featured_restaurants %}
+    <!-- Featured Restaurants -->
+    <section class="project-featured-restaurants">
+        <div class="project-section-header">
+            <h2>Top-Rated Restaurants</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Trending</button>
+                <button class="filter-btn">New</button>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="project-restaurants-grid">
+            {% for restaurant in restaurants %}
+            <div class="restaurant-card">
+                <a href="{% url 'restaurant:detail' restaurant.id %}" class="restaurant-link">
+                    <div class="restaurant-image">
+                        {% if restaurant.image %}
+                            <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}">
+                        {% else %}
+                            <img src="{% static 'images/default_restaurant.jpg' %}" alt="{{ restaurant.name }}">
+                        {% endif %}
+                        <span class="rating"><i class="fas fa-star"></i> {{ restaurant.rating }}</span>
+                    </div>
+                    <div class="restaurant-info">
+                        <h3>{{ restaurant.name }}</h3>
+                        <p class="cuisine">{{ restaurant.cuisine_types }}</p>
+                        <div class="restaurant-meta">
+                            <span><i class="fas fa-clock"></i> {{ restaurant.delivery_time }}</span>
+                            <span><i class="fas fa-motorcycle"></i> 
+                                {% if restaurant.delivery_fee == 0 %}
+                                    Free delivery
+                                {% else %}
+                                    ₹{{ restaurant.delivery_fee }} delivery
+                                {% endif %}
+                            </span>
+                            <span><i class="fas fa-rupee-sign"></i> ₹{{ restaurant.minimum_order }} for two</span>
+                        </div>
+                    </div>
+                </a>
+                {% if not user.is_authenticated %}
+                    <div class="login-prompt">
+                        <a href="{% url 'auth:login' %}" class="login-to-order">Login to Order</a>
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endblock %}
+
+    {% block app_section %}
+    <!-- Mobile App Section -->
+    <section class="project-app-section">
+        <div class="project-app-content">
+            <div class="app-text">
+                <h2>Get the FoodieExpress App</h2>
+                <p>Order from your favorite restaurants, track delivery in real-time</p>
+                <ul class="app-features">
+                    <li><i class="fas fa-check-circle"></i> Exclusive app-only offers</li>
+                    <li><i class="fas fa-check-circle"></i> Real-time order tracking</li>
+                    <li><i class="fas fa-check-circle"></i> Personalized recommendations</li>
+                </ul>
+                <div class="app-buttons">
+                    <a href="#" class="app-btn">
+                        <img src="{% static 'images/app-store.png' %}" alt="Download on App Store">
+                    </a>
+                    <a href="#" class="app-btn">
+                        <img src="{% static 'images/play-store.png' %}" alt="Get it on Play Store">
+                    </a>
+                </div>
+            </div>
+            <div class="app-image">
+                <img src="{% static 'images/mobile-app.png' %}" alt="FoodieExpress Mobile App">
+                <div class="app-image-overlay"></div>
+            </div>
+        </div>
+    </section>
+    {% endblock %}
+
+    <!-- How It Works Section -->
+    <section class="project-how-it-works">
+        <h2>How It Works</h2>
+        <div class="project-steps-grid">
+            <div class="project-step-card">
+                <div class="project-step-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>Find Restaurant</h3>
+                <p>Choose from our wide selection of restaurants</p>
+            </div>
+            <div class="project-step-card">
+                <div class="project-step-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h3>Choose Meals</h3>
+                <p>Browse menus and select your favorite dishes</p>
+            </div>
+            <div class="project-step-card">
+                <div class="project-step-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <h3>Fast Delivery</h3>
+                <p>Get your food delivered to your doorstep</p>
+            </div>
+        </div>
+    </section>
+    {% endblock %}
+
+    {% block footer %}
+    <!-- Footer -->
+    <footer class="project-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>FoodieExpress</h3>
+                <p>The best food delivery experience</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                <p><i class="fas fa-envelope"></i> support@foodieexpress.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Food Street, NY 10001</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 FoodieExpress. All rights reserved.</p>
+        </div>
+    </footer>
+    {% endblock %}
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

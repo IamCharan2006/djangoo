@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% load static %}
+<nav class="homepage-navbar">
+    <div class="homepage-nav-content">
+        <a href="{% url 'HomePage' %}" class="homepage-logo">Foodie<span>Express</span></a>
+        <div class="homepage-nav-links">
+            <a href="{% url 'HomePage' %}" class="homepage-nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="{% url 'user:restaurants' %}" class="homepage-nav-link"><i class="fas fa-utensils"></i> Restaurants</a>
+            <a href="{% url 'user:favorites' %}" class="homepage-nav-link"><i class="fas fa-heart"></i> Favorites</a>
+            <a href="{% url 'user:orders' %}" class="homepage-nav-link"><i class="fas fa-history"></i> Orders</a>
+            <div class="homepage-user-menu">
+                <div class="homepage-dropdown">
+                    <button class="homepage-dropbtn" onclick="toggleDropdown(event)">
+                        <i class="fas fa-user"></i> {{ user.username }}
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="homepage-dropdown-content" id="userDropdown">
+                        <a href="{% url 'user:dashboard' %}"><i class="fas fa-user"></i> Dashboard</a>
+                        <a href="{% url 'auth:profile' %}"><i class="fas fa-cog"></i> FeedBack</a>
+                        <a href="{% url 'auth:profile' %}"><i class="fas fa-cog"></i> Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'auth:logout' %}" class="logout-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        <form id="logout-form" action="{% url 'auth:logout' %}" method="post" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+function toggleDropdown(event) {
+    event.preventDefault();
+    const dropdown = document.getElementById('userDropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function closeDropdown(e) {
+        if (!e.target.closest('.homepage-dropdown')) {
+            dropdown.style.display = 'none';
+            document.removeEventListener('click', closeDropdown);
+        }
+    });
+}
+</script>
+</body>
+</html>

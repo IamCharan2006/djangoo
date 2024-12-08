@@ -1,0 +1,103 @@
+{% extends 'ProjectHomePage.html' %}
+{% load static %}
+
+{% block title %}FoodieExpress - Your Cart{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<section class="cart-page">
+    <div class="cart-header">
+        <h1>Your Cart</h1>
+        <span class="item-count">{{ cart.cartitem_set.count }} items</span>
+    </div>
+
+    <div class="cart-container">
+        {% if cart.cartitem_set.exists %}
+        <div class="cart-items">
+            {% for item in cart.cartitem_set.all %}
+            <div class="cart-item">
+                <div class="item-image">
+                    <img src="{{ item.menu_item.image.url }}" alt="{{ item.menu_item.name }}">
+                </div>
+                <div class="item-details">
+                    <h3>{{ item.menu_item.name }}</h3>
+                    <p class="restaurant">{{ item.menu_item.restaurant.name }}</p>
+                    <p class="price">₹{{ item.menu_item.price }}</p>
+                </div>
+                <div class="item-quantity">
+                    <form method="post" action="{% url 'order:update_cart' %}" class="quantity-form" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <input type="hidden" name="action" value="decrease">
+                        <button type="submit" class="quantity-btn">-</button>
+                    </form>
+                    
+                    <span class="quantity">{{ item.quantity }}</span>
+                    
+                    <form method="post" action="{% url 'order:update_cart' %}" class="quantity-form" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <input type="hidden" name="action" value="increase">
+                        <button type="submit" class="quantity-btn">+</button>
+                    </form>
+                </div>
+                <div class="item-total">
+                    ₹{{ item.get_total }}
+                </div>
+                <form method="post" action="{% url 'order:remove_from_cart' %}" class="remove-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                    <button type="submit" class="remove-item-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="cart-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-item">
+                <span>Subtotal</span>
+                <span>₹{{ cart.get_total }}</span>
+            </div>
+            <div class="summary-item">
+                <span>Delivery Fee</span>
+                <span>₹50</span>
+            </div>
+            <div class="summary-item total">
+                <span>Total</span>
+                <span>₹{{ cart.get_total|add:50 }}</span>
+            </div>
+            <form method="post" action="{% url 'order:checkout' %}">
+                {% csrf_token %}
+                <button type="submit" class="checkout-btn">
+                    Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+        {% else %}
+        <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h2>Your cart is empty</h2>
+            <p>Add items from restaurants to start your order!</p>
+            <a href="#" class="browse-btn">Browse Restaurants</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

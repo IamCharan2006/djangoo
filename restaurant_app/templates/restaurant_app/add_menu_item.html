@@ -1,0 +1,217 @@
+{% extends 'restaurant_app/base_restaurant_dashboard.html' %}
+{% load static %}
+
+{% block title %}Add Menu Item{% endblock %}
+
+{% block extra_css %}
+<style>
+    .add-menu-item {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+    }
+
+    .form-header {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .form-header h1 {
+        color: var(--text-primary);
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .menu-item-form {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 0.75rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-family: inherit;
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .image-preview {
+        width: 200px;
+        height: 200px;
+        border: 2px dashed #e0e0e0;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    .image-preview img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 1rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: var(--accent-color);
+        color: white;
+        border: none;
+    }
+
+    .btn-secondary {
+        background: #f5f5f5;
+        color: var(--text-primary);
+        border: 1px solid #e0e0e0;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="add-menu-item">
+    <div class="form-header">
+        <h1>{% if is_edit %}Edit{% else %}Add New{% endif %} Menu Item</h1>
+        <p>{% if is_edit %}Update{% else %}Add{% endif %} details about your menu item below</p>
+    </div>
+    
+    <form method="POST" enctype="multipart/form-data" class="menu-item-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="name">Item Name*</label>
+            <input type="text" id="name" name="name" required 
+                   value="{{ menu_item.name|default:'' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description*</label>
+            <textarea id="description" name="description" required>{{ menu_item.description|default:'' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price (₹)*</label>
+            <input type="number" id="price" name="price" step="0.01" min="0" required 
+                   value="{{ menu_item.price|default:'' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="main_category">Main Category*</label>
+            <select id="main_category" name="main_category" required>
+                {% for value, label in form.main_category.field.choices %}
+                    <option value="{{ value }}" 
+                        {% if value == menu_item.main_category %} selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sub_category">Sub-category (Optional)</label>
+            <input type="text" id="sub_category" name="sub_category" 
+                   placeholder="Enter sub-category (e.g., Vegetarian, Spicy, etc.)"
+                   value="{{ menu_item.sub_category|default:'' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="image">Item Image{% if not menu_item %}*{% endif %}</label>
+            <input type="file" id="image" name="image" accept="image/*" 
+                   {% if not menu_item %}required{% endif %} 
+                   onchange="previewImage(this)">
+            <div class="image-preview" id="imagePreview">
+                {% if menu_item and menu_item.image %}
+                    <img src="{{ menu_item.image.url }}" alt="{{ menu_item.name }}">
+                {% else %}
+                    <span>No image selected</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="checkbox-label">
+                <input type="checkbox" id="is_available" name="is_available" 
+                       {% if menu_item.is_available %}checked{% endif %}>
+                Available for Order
+            </label>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
+            <button type="submit" class="btn btn-primary">
+                {% if is_edit %}Update{% else %}Add{% endif %} Item
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function previewImage(input) {
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = '';
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            preview.appendChild(img);
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.innerHTML = '<span>No image selected</span>';
+    }
+}
+</script>
+
+{% if is_edit %}
+<script>
+    // Show existing image in preview
+    window.onload = function() {
+        const preview = document.getElementById('imagePreview');
+        preview.innerHTML = '<img src="{{ menu_item.image.url }}" alt="{{ menu_item.name }}">';
+    }
+</script>
+{% endif %}
+{% endblock %}

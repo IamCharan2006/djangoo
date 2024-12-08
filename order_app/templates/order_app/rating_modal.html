@@ -1,0 +1,28 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h2>Rate Your Order</h2>
+        <button class="close-modal" onclick="closeRatingModal()">&times;</button>
+    </div>
+    
+    <form id="ratingForm" method="post" action="{% url 'order:rate_order' order.id %}">
+        {% csrf_token %}
+        <div class="rating-stars">
+            {% for value, label in form.rating.field.choices %}
+            <input type="radio" name="rating" value="{{ value }}" id="star{{ value }}"
+                   class="star-input" {% if form.rating.value == value %}checked{% endif %}>
+            <label for="star{{ value }}" class="star-label">
+                <i class="fas fa-star"></i>
+            </label>
+            {% endfor %}
+        </div>
+        
+        <div class="feedback-field">
+            {{ form.feedback }}
+        </div>
+        
+        <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="closeRatingModal()">Cancel</button>
+            <button type="submit" class="btn-primary">Submit Rating</button>
+        </div>
+    </form>
+</div> 

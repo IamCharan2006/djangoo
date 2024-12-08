@@ -1,0 +1,180 @@
+{% extends 'ProjectHomePage.html' %}
+{% load static %}
+
+{% block title %}{{ restaurant.name }} - FoodieExpress{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/restaurant-detail.css' %}">
+{% endblock %}
+
+{# Block the hero section from ProjectHomePage #}
+{% block hero %}{% endblock %}
+
+{# Block the featured categories section #}
+{% block featured_categories %}{% endblock %}
+
+{# Block the featured restaurants section #}
+{% block featured_restaurants %}{% endblock %}
+
+{# Block the app section #}
+{% block app_section %}{% endblock %}
+
+{% block main_content %}
+<div class="restaurant-detail-page">
+    <!-- Restaurant Info Card -->
+    <div class="restaurant-info-container">
+        <div class="restaurant-card">
+            <div class="banner-container">
+                {% if restaurant.banner and restaurant.banner.url %}
+                    <img src="{{ restaurant.banner.url }}" alt="{{ restaurant.name }} banner" class="banner-image">
+                {% else %}
+                    <img src="{% static DEFAULT_BANNER_IMAGE %}" alt="Default banner" class="banner-image">
+                {% endif %}
+            </div>
+            <div class="restaurant-content">
+                <div class="restaurant-profile">
+                    {% if restaurant.image and restaurant.image.url %}
+                        <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" class="restaurant-logo">
+                    {% else %}
+                        <img src="{% static DEFAULT_RESTAURANT_IMAGE %}" alt="{{ restaurant.name }}" class="restaurant-logo">
+                    {% endif %}
+                </div>
+                <div class="restaurant-details">
+                    <div class="restaurant-header">
+                        <h1>{{ restaurant.name }}</h1>
+                        <div class="restaurant-badges">
+                            {% if restaurant.is_verified %}
+                                <span class="badge verified"><i class="fas fa-check-circle"></i> Verified</span>
+                            {% endif %}
+                            {% if restaurant.is_premium %}
+                                <span class="badge premium"><i class="fas fa-crown"></i> Premium</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p class="cuisines">{{ restaurant.specialties|join:", " }}</p>
+                    <div class="restaurant-meta">
+                        <span class="rating"><i class="fas fa-star"></i> {{ restaurant.rating|floatformat:1 }}</span>
+                        <span class="delivery"><i class="fas fa-motorcycle"></i> ₹{{ restaurant.delivery_fee|floatformat:2 }}</span>
+                        <span class="time"><i class="fas fa-clock"></i> {{ restaurant.opening_time|time:"H:i" }} - {{ restaurant.closing_time|time:"H:i" }}</span>
+                        <span class="min-order"><i class="fas fa-shopping-basket"></i> Min ₹{{ restaurant.minimum_order }}</span>
+                    </div>
+                    <div class="restaurant-address">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>{{ restaurant.address }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="content-wrapper">
+            <!-- Menu Categories Sidebar -->
+            <div class="menu-sidebar">
+                <div class="menu-categories">
+                    <h3>Menu</h3>
+                    <ul>
+                        {% for category, items in categorized_items.items %}
+                        <li><a href="#{{ category|slugify }}">{{ category }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Menu Content -->
+            <div class="menu-content">
+                <!-- Search and Filters -->
+                <div class="menu-search-bar">
+                    <div class="search-input">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="menuSearch" placeholder="Search menu items...">
+                    </div>
+                    <div class="menu-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="veg">Veg</button>
+                        <button class="filter-btn" data-filter="non-veg">Non-veg</button>
+                        <button class="filter-btn" data-filter="bestseller">Bestseller</button>
+                    </div>
+                </div>
+
+                <!-- Menu Sections -->
+                {% for category, items in categorized_items.items %}
+                <section id="{{ category|slugify }}" class="menu-section">
+                    <h2 class="category-title">{{ category }}</h2>
+                    {% for item in items %}
+                    <div class="menu-item {% if item.is_bestseller %}bestseller{% endif %}" 
+                         data-category="{{ category|slugify }}" 
+                         {% if item.is_veg %}data-veg="true"{% endif %}>
+                        <div class="item-details">
+                            <div class="item-header">
+                                {% if item.is_veg %}
+                                <span class="veg-badge"><i class="fas fa-leaf"></i></span>
+                                {% endif %}
+                                <h3>{{ item.name }}</h3>
+                            </div>
+                            <div class="price">₹{{ item.price }}</div>
+                            <p class="description">{{ item.description }}</p>
+                            <button class="add-to-cart-btn" 
+                                    data-item-id="{{ item.id }}"
+                                    data-item-name="{{ item.name }}"
+                                    data-item-price="{{ item.price }}"
+                                    data-item-image="{% if item.image %}{{ item.image.url }}{% else %}{% static 'images/default-food-image.jpg' %}{% endif %}">
+                                <span class="price">₹{{ item.price }}</span>
+                                <span class="add-text">ADD</span>
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="item-image">
+                            {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                            {% else %}
+                            <img src="{% static 'images/default-food-image.jpg' %}" alt="{{ item.name }}">
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </section>
+                {% endfor %}
+            </div>
+
+            <!-- Cart Sidebar -->
+            <div class="cart-sidebar">
+                <div class="cart-container">
+                    <div class="cart-header">
+                        <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+                        <span class="cart-total">₹0.00</span>
+                    </div>
+                    <div class="cart-items">
+                        <!-- Cart items will be added here dynamically -->
+                    </div>
+                    <div class="cart-footer">
+                        <div class="subtotal">
+                            <span>Subtotal:</span>
+                            <span class="amount">₹0.00</span>
+                        </div>
+                        <form method="post" action="{% url 'order:paypal_payment' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="checkout-btn" disabled>
+                                Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/restaurant-detail.js' %}"></script>
+<script>
+    // JavaScript code for cart and other features
+    document.addEventListener('DOMContentLoaded', function() {
+        window.cart = new Cart();
+    });
+</script>
+{% endblock %}

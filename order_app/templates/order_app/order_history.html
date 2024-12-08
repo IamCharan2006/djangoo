@@ -1,0 +1,181 @@
+{% extends 'ProjectHomePage.html' %}
+{% load static %}
+
+{% block title %}FoodieExpress - Order History{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/order_history.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<section class="order-history-page">
+    <div class="order-history-header">
+        <h1>Order History</h1>
+        
+        <!-- Search and Filters -->
+        <div class="history-controls">
+            <form class="history-filters" method="get">
+                <div class="search-box">
+                    <input type="text" name="search" placeholder="Search orders..." 
+                           value="{{ current_filters.search }}">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div class="filter-group">
+                    <select name="status">
+                        <option value="">All Statuses</option>
+                        {% for status, label in status_choices %}
+                        <option value="{{ status }}" 
+                                {% if status == current_filters.status %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <select name="date_range">
+                        <option value="">All Time</option>
+                        <option value="today" {% if current_filters.date_range == 'today' %}selected{% endif %}>Today</option>
+                        <option value="week" {% if current_filters.date_range == 'week' %}selected{% endif %}>Last 7 Days</option>
+                        <option value="month" {% if current_filters.date_range == 'month' %}selected{% endif %}>Last 30 Days</option>
+                    </select>
+
+                    <select name="sort_by">
+                        <option value="-created_at" {% if current_filters.sort_by == '-created_at' %}selected{% endif %}>Newest First</option>
+                        <option value="created_at" {% if current_filters.sort_by == 'created_at' %}selected{% endif %}>Oldest First</option>
+                        <option value="-total_amount" {% if current_filters.sort_by == '-total_amount' %}selected{% endif %}>Highest Amount</option>
+                        <option value="total_amount" {% if current_filters.sort_by == 'total_amount' %}selected{% endif %}>Lowest Amount</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="order-history-container">
+        {% if orders %}
+            {% for order in orders %}
+            <div class="order-card" data-order-id="{{ order.id }}">
+                <div class="order-header">
+                    <div class="order-info">
+                        <h3>Order #{{ order.order_number }}</h3>
+                        <span class="order-date">{{ order.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="order-status {{ order.status|lower }}">
+                        {{ order.get_status_display }}
+                    </div>
+                </div>
+                <div class="order-items">
+                    {% for item in order.items.all %}
+                    <div class="order-item">
+                        <span class="item-quantity">{{ item.quantity }}x</span>
+                        <span class="item-name">{{ item.menu_item.name }}</span>
+                        <span class="item-price">₹{{ item.get_total }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="order-footer">
+                    <div class="order-total">
+                        <span>Total:</span>
+                        <span class="total-amount">₹{{ order.get_total }}</span>
+                    </div>
+                    <a href="{% url 'order:track_order' order.id %}" class="track-btn">
+                        Track Order
+                    </a>
+                </div>
+                <div class="order-actions">
+                    <form method="post" action="{% url 'order:reorder' order.id %}" class="reorder-form">
+                        {% csrf_token %}
+                        <button type="submit" class="reorder-btn">
+                            <i class="fas fa-redo"></i> Reorder
+                        </button>
+                    </form>
+                    {% if order.status == 'DELIVERED' and not order.rating %}
+                    <button class="rate-btn" onclick="openRatingModal('{{ order.id }}')">
+                        <i class="fas fa-star"></i> Rate Order
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Pagination -->
+            {% if orders.has_other_pages %}
+            <div class="pagination">
+                {% if orders.has_previous %}
+                <a href="?page={{ orders.previous_page_number }}&{{ request.GET.urlencode }}" class="page-link">&laquo;</a>
+                {% endif %}
+                
+                {% for num in orders.paginator.page_range %}
+                    {% if orders.number == num %}
+                    <span class="page-link active">{{ num }}</span>
+                    {% else %}
+                    <a href="?page={{ num }}&{{ request.GET.urlencode }}" class="page-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if orders.has_next %}
+                <a href="?page={{ orders.next_page_number }}&{{ request.GET.urlencode }}" class="page-link">&raquo;</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-history">
+                <i class="fas fa-history"></i>
+                <h2>No Orders Yet</h2>
+                <p>Start ordering your favorite food!</p>
+                <a href="{% url 'restaurants' %}" class="browse-btn">Browse Restaurants</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Rating Modal -->
+<div id="ratingModal" class="modal">
+    <!-- Modal content will be loaded dynamically -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    // Auto-submit form when filters change
+    document.querySelectorAll('.history-filters select').forEach(select => {
+        select.addEventListener('change', () => {
+            select.closest('form').submit();
+        });
+    });
+
+    // Rating modal functionality
+    function openRatingModal(orderId) {
+        const modal = document.getElementById('ratingModal');
+        modal.style.display = 'block';
+        // Load rating form via AJAX
+        fetch(`/order/${orderId}/rating-form/`)
+            .then(response => response.text())
+            .then(html => {
+                modal.innerHTML = html;
+            });
+    }
+
+    // Add WebSocket connection for active orders
+    const activeOrders = document.querySelectorAll('.order-card');
+    activeOrders.forEach(orderCard => {
+        const orderId = orderCard.dataset.orderId;
+        const statusElement = orderCard.querySelector('.order-status');
+        
+        if (['DELIVERED', 'CANCELLED'].includes(statusElement.textContent.trim())) {
+            return;
+        }
+
+        const socket = new WebSocket(
+            `ws://${window.location.host}/ws/order/${orderId}/`
+        );
+
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            statusElement.textContent = data.status;
+            statusElement.className = `order-status ${data.status.toLowerCase()}`;
+        };
+    });
+</script>
+{% endblock %} 

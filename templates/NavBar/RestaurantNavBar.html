@@ -1,0 +1,60 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/Restaurant_DashBoard.css' %}">
+<link rel="stylesheet" href="{% static 'css/RestaurantNavBar.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<nav class="restaurant-navbar">
+    <div class="nav-content">
+        <a href="#" class="logo">Foodie<span>Express</span></a>
+        <div class="nav-links">
+            {% if user.is_authenticated %}
+                {% if user.restaurantprofile.restaurant %}
+                    <!-- Restaurant owner navigation -->
+                    <a href="{% url 'restaurant:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                    <a href="{% url 'restaurant:menu_management' request.user.restaurantprofile.restaurant.id %}" class="nav-link {% if request.resolver_match.url_name == 'menu_management' %}active{% endif %}">
+                        <i class="fas fa-utensils"></i> Menu
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-shopping-bag"></i> Orders
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-chart-line"></i> Analytics
+                    </a>
+                {% else %}
+                    <!-- User is logged in but doesn't have a restaurant -->
+                    <a href="{% url 'restaurant:register_restaurant' %}" class="nav-link register-restaurant-btn">
+                        <i class="fas fa-plus-circle"></i> Register Your Restaurant
+                    </a>
+                {% endif %}
+            {% else %}
+                <!-- Not logged in -->
+                <a href="{% url 'auth:login' %}?next={% url 'restaurant:register_restaurant' %}" class="nav-link">
+                    <i class="fas fa-sign-in-alt"></i> Login to Register Restaurant
+                </a>
+            {% endif %}
+        </div>
+        
+        <!-- Profile section -->
+        <div class="profile-section">
+            {% if user.is_authenticated %}
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+                <div class="profile-menu">
+                    <img src="{% static 'images/default-profile.png' %}" alt="Profile" class="profile-img">
+                    <span>{{ request.user.restaurantprofile.restaurant.name|default:"Register Restaurant" }}</span>
+                    <div class="profile-dropdown">
+                        <a href="#" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'auth:logout' %}" class="dropdown-item logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,97 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodieExpress Customer Support</title>
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}">
+</head>
+<body>
+    <!-- Chatbot Icon -->
+    <div class="chatbot-icon" id="chatbot-icon">
+        <img src="{% static 'images/chatbot_image.png' %}" alt="Chat Icon"/>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget" id="chatbot">
+        <div class="chatbot-header">
+            <h3>FoodieExpress Customer Support</h3>
+        </div>
+        <div class="chatbot-body" id="chatbot-body">
+            <div class="message bot-message">
+                Welcome to FoodieExpress! How can we assist you today?
+            </div>
+        </div>
+        <div class="chatbot-footer-container">
+            <div class="chatbot-footer">
+                <form method="POST" id="chat-form">
+                    {% csrf_token %}
+                    <div class="input-container">
+                        <input type="text" name="message" placeholder="Type your message..." id="user-message" required />
+                        <button type="submit" class="submit-button">
+                            <span class="button-icon">➤</span> <!-- Arrow symbol -->
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatbotIcon = document.getElementById('chatbot-icon');
+        const chatbotWidget = document.getElementById('chatbot');
+        const chatbotBody = document.getElementById('chatbot-body');
+        const chatForm = document.getElementById('chat-form');
+
+        // Toggle chatbot visibility
+        chatbotIcon.addEventListener('click', () => {
+            chatbotWidget.classList.toggle('open');
+        });
+
+        // Handle form submission
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userMessage = document.getElementById('user-message').value;
+
+            if (userMessage.trim()) {
+                // Add the user message to the chat display
+                const userMsgElement = document.createElement('div');
+                userMsgElement.className = 'message user-message';
+                userMsgElement.textContent = userMessage;
+                chatbotBody.appendChild(userMsgElement);
+
+                // Clear input
+                document.getElementById('user-message').value = '';
+
+                // Scroll to the latest message
+                chatbotBody.scrollTop = chatbotBody.scrollHeight;
+
+                try {
+                    // Send the message to the server
+                    const response = await fetch('/chat/chatbot/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({ 'message': userMessage })
+                    });
+
+                    const data = await response.json();
+                    if (data.response) {
+                        // Add the bot response to the chat display
+                        const botMsgElement = document.createElement('div');
+                        botMsgElement.className = 'message bot-message';
+                        botMsgElement.innerHTML = data.response;
+                        chatbotBody.appendChild(botMsgElement);
+                    } else if (data.error) {
+                        console.error(data.error);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

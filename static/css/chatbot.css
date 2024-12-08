@@ -1,0 +1,137 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.chatbot-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #f34848; /* Red beach color */
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000; /* Ensure it is above other elements */
+}
+
+.chatbot-icon img {
+    width: 50px; /* Adjust size as needed */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.chatbot-widget {
+    position: fixed;
+    bottom: 80px; /* Adjusted to fit above the icon */
+    right: 20px;
+    width: 350px; /* Increased width */
+    height: 450px; /* Increased height */
+    background-color: #f5f5dc; /* Beach color */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: none; /* Initially hidden */
+    flex-direction: column;
+    z-index: 1000; /* Ensure it is above other elements */
+}
+
+.chatbot-widget.open {
+    display: flex; /* Show when open */
+}
+
+.chatbot-header {
+    background-color: #f34848; /* Darker shade for header */
+    padding: 10px;
+    color: white;
+    text-align: center;
+}
+
+.chatbot-body {
+    padding: 10px;
+    height: 350px; /* Adjusted height for body */
+    overflow-y: auto;
+    background-color: #f5f5dc; /* Same as widget background */
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+}
+
+.message {
+    background-color: #f34848; /* Red background for messages */
+    color: white; /* White text color */
+    padding: 10px; /* Padding for the message box */
+    border-radius: 15px; /* Rounded corners */
+    margin: 5px 0; /* Space between messages */
+    max-width: 80%; /* Limit width of messages */
+}
+
+.user-message {
+    align-self: flex-end; /* Align user messages to the right */
+    background-color: #f34848; /* Green background for user messages */
+}
+
+.bot-message {
+    align-self: flex-start; /* Align bot messages to the left */
+    background-color: #f34848; /* Red background for bot messages */
+}
+.chatbot-footer-container {
+    width: 100%; /* Full width of the page */
+    max-width: 1200px; /* Optional: max width to prevent stretching on large screens */
+    margin: 0 auto; /* Center the footer horizontally */
+}
+
+/* Footer container with red peach color */
+.chatbot-footer {
+    padding: 10px;
+    background-color: #f34848; /* Red peach color */
+    align-items: center; /* Centers items vertically */
+    width: 100%; /* Full width of its parent container */
+}
+
+/* Input container to hold input and submit button */
+.chatbot-footer .input-container {
+    display: flex;
+    width: 100%; /* Full width */
+}
+
+/* Input text field (85% width) */
+.chatbot-footer input {
+    flex-grow: 0; /* Prevents input from growing beyond 85% */
+    flex-basis: 85%; /* Ensures the input takes up 85% of the available width */
+    padding: 12px;
+    border: none;
+    border-radius: 5px 0 0 5px; /* Rounded corners on the left */
+    background-color: white;
+    color: black;
+    font-size: 14px;
+}
+
+/* Submit button (15% width) */
+.submit-button {
+    flex-grow: 0; /* Prevents button from growing beyond 15% */
+    flex-basis: 15%; /* Ensures the button takes up 15% of the available width */
+    padding: 12px;
+    border: none;
+    border-radius: 0 5px 5px 0; /* Rounded corners on the right */
+    background-color: #f34848; /* Red peach background */
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Button icon spacing */
+.submit-button .button-icon {
+    margin-right: 5px;
+    font-size: 18px; /* Adjust icon size */
+}
+
+/* Button hover effect */
+.submit-button:hover {
+    background-color: #d93a3a; /* Darker shade on hover */
+}
+
+/* Input field placeholder */
+.chatbot-footer input::placeholder {
+    color: #888;
+}

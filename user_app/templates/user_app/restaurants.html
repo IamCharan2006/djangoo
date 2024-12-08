@@ -1,0 +1,107 @@
+{% extends 'ProjectHomePage.html' %}
+{% load static %}
+
+{% block title %}FoodieExpress - Explore Restaurants{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/restaurants.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<!-- Add this for debugging -->
+<div style="display: none;">
+    Number of restaurants: {{ restaurants|length }}
+    Filters: {{ current_filters }}
+</div>
+
+<section class="restaurants-page">
+    <!-- Header Section -->
+    <div class="restaurants-header">
+        <h1>Explore Restaurants</h1>
+        <p>Discover the best food & drinks in your neighborhood</p>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="restaurant-filters">
+        <form method="get" class="filter-form">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" name="search" placeholder="Search restaurants or cuisines..." 
+                       value="{{ current_filters.search }}">
+            </div>
+            
+            <div class="filter-options">
+                <select name="cuisine" class="cuisine-filter">
+                    <option value="">All Cuisines</option>
+                    {% for cuisine in cuisines %}
+                    <option value="{{ cuisine }}" 
+                            {% if cuisine == current_filters.cuisine %}selected{% endif %}>
+                        {{ cuisine|title }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <select name="sort" class="sort-filter">
+                    <option value="">Sort By</option>
+                    <option value="rating" {% if current_filters.sort == 'rating' %}selected{% endif %}>Rating</option>
+                    <option value="delivery_time" {% if current_filters.sort == 'delivery_time' %}selected{% endif %}>Delivery Time</option>
+                </select>
+
+                <button type="submit" class="filter-submit">Apply Filters</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Restaurants Grid -->
+    <div class="restaurants-grid">
+        {% for restaurant in restaurants %}
+        <a href="{% url 'restaurant:detail' restaurant.id %}" class="restaurant-card">
+            <!-- Restaurant Image Section with Badges -->
+            <div class="restaurant-image">
+                {% if restaurant.image %}
+                    <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}">
+                {% else %}
+                    <img src="{% static 'images/defaults/default_restaurant.jpg' %}" alt="{{ restaurant.name }}">
+                {% endif %}
+                <div class="restaurant-badges">
+                    {% if restaurant.rating %}
+                    <span class="badge rating">{{ restaurant.rating|floatformat:1 }}</span>
+                    {% endif %}
+                    <span class="badge {% if restaurant.is_open %}open{% else %}closed{% endif %}">
+                        {% if restaurant.is_open %}Open{% else %}Closed{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Restaurant Name -->
+            <div class="restaurant-header">
+                <h2>{{ restaurant.name }}</h2>
+            </div>
+
+            <!-- Restaurant Meta Information -->
+            <div class="restaurant-meta">
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>{{ restaurant.preparation_time }} mins</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-motorcycle"></i>
+                    <span>₹{{ restaurant.delivery_fee }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="rupee-symbol">₹</span>
+                    <span>Min ₹{{ restaurant.minimum_order }}</span>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <div class="no-restaurants">
+            <i class="fas fa-utensils"></i>
+            <h2>No Restaurants Found</h2>
+            <p>Try adjusting your filters or search criteria</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

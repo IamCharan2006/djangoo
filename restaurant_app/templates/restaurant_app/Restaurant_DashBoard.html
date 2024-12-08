@@ -1,0 +1,346 @@
+{% extends 'restaurant_app/base_restaurant_dashboard.html' %}
+{% load static %}
+
+{% block title %}FoodieExpress - Restaurant Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome back, {{ request.user.restaurantprofile.restaurant_name }}!</h1>
+        <p>Here's your restaurant's performance at a glance</p>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon orders">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Today's Orders</h3>
+                <div class="stat-number">{{ stats.today_orders }}</div>
+                <p class="stat-trend {% if stats.orders_difference >= 0 %}positive{% else %}negative{% endif %}">
+                    {% if stats.orders_difference >= 0 %}+{% endif %}{{ stats.orders_difference }} from yesterday
+                </p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon revenue">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Revenue</h3>
+                <div class="stat-number">${{ stats.today_revenue }}</div>
+                <p class="stat-trend {% if stats.revenue_difference >= 0 %}positive{% else %}negative{% endif %}">
+                    {% if stats.revenue_difference >= 0 %}+{% endif %}${{ stats.revenue_difference }} from yesterday
+                </p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon rating">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Rating</h3>
+                <div class="stat-number">{{ stats.rating }}</div>
+                <p class="stat-trend positive">+0.2 this week</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon active">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Active Orders</h3>
+                <div class="stat-number">{{ stats.active_orders }}</div>
+                <p class="stat-trend neutral">Active now</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions -->
+<section class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="actions-grid">
+        <div class="action-card">
+            <div class="action-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h3>Manage Menu</h3>
+            <p>Update items, prices, and availability</p>
+            <button class="btn btn-primary">Edit Menu</button>
+        </div>
+        <div class="action-card">
+            <div class="action-icon">
+                <i class="fas fa-chart-pie"></i>
+            </div>
+            <h3>Analytics</h3>
+            <p>View detailed performance metrics</p>
+            <button class="btn btn-primary">View Reports</button>
+        </div>
+        <div class="action-card">
+            <div class="action-icon">
+                <i class="fas fa-cog"></i>
+            </div>
+            <h3>Settings</h3>
+            <p>Update restaurant profile and preferences</p>
+            <button class="btn btn-primary">Configure</button>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Orders -->
+<section class="recent-orders">
+    <div class="section-header">
+        <div class="header-left">
+            <h2>Recent Orders</h2>
+            <span class="order-count">{{ recent_orders|length }} orders today</span>
+        </div>
+        <div class="header-right">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search orders...">
+            </div>
+            <button class="btn btn-secondary">
+                <i class="fas fa-list"></i>
+                View All Orders
+            </button>
+        </div>
+    </div>
+    <div class="orders-table-wrapper">
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="th-content">
+                            <span>Order ID</span>
+                            <i class="fas fa-sort"></i>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th-content">
+                            <span>Customer</span>
+                            <i class="fas fa-sort"></i>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th-content">
+                            <span>Items</span>
+                            <i class="fas fa-sort"></i>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th-content">
+                            <span>Total</span>
+                            <i class="fas fa-sort"></i>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th-content">
+                            <span>Status</span>
+                            <i class="fas fa-sort"></i>
+                        </div>
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in recent_orders %}
+                <tr>
+                    <td>
+                        <div class="order-id">#{{ order.id }}</div>
+                        <div class="order-date">{{ order.created_at|date:"M d, H:i" }}</div>
+                    </td>
+                    <td>
+                        <div class="customer-info">
+                            <div class="customer-name">{{ order.customer.username }}</div>
+                            <div class="customer-email">{{ order.customer.email }}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="items-info">
+                            <span class="items-count">{{ order.items.count }} items</span>
+                            <i class="fas fa-info-circle" title="Click to view items"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="total-amount">${{ order.total_amount }}</div>
+                    </td>
+                    <td>
+                        <span class="status {{ order.status }}">
+                            <i class="fas fa-circle"></i>
+                            {{ order.status|title }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-icon" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm">Process</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Menu Items Section -->
+<section class="menu-items">
+    <div class="section-header">
+        <div class="header-left">
+            <h2>Menu Items</h2>
+            <span class="item-count">{{ menu_items|length }} items listed</span>
+        </div>
+        <div class="header-right">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search menu items...">
+            </div>
+            <a href="{% url 'restaurant:add_menu_item' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Add New Item
+            </a>
+        </div>
+    </div>
+
+    <div class="menu-items-grid">
+        {% for item in menu_items %}
+        <div class="mm-menu-item-card">
+            <div class="mm-menu-item-image">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" 
+                         onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'mm-placeholder\'><i class=\'fas fa-utensils\'></i><span>No image available</span></div>'">
+                {% else %}
+                    <div class="mm-placeholder">
+                        <i class="fas fa-utensils"></i>
+                        <span>No image available</span>
+                    </div>
+                {% endif %}
+                <span class="mm-status-badge {% if item.is_available %}available{% else %}unavailable{% endif %}">
+                    {{ item.is_available|yesno:"Available,Unavailable" }}
+                </span>
+            </div>
+            <div class="mm-menu-item-details">
+                <div class="mm-menu-item-header">
+                    <h3>{{ item.name }}</h3>
+                    {% if item.sub_category %}
+                    <span class="mm-category-tag">{{ item.sub_category }}</span>
+                    {% endif %}
+                </div>
+                <p class="mm-menu-item-description">{{ item.description|truncatechars:100 }}</p>
+                <div class="mm-menu-item-footer">
+                    <span class="mm-price">₹{{ item.price }}</span>
+                    <div class="mm-action-buttons">
+                        <a href="{% url 'restaurant:edit_menu_item' item_id=item.id %}" class="mm-btn-icon" title="Edit Item">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="mm-btn-icon" title="Toggle Availability" onclick="toggleAvailability('{{ item.id }}', this)">
+                            <i class="fas fa-toggle-{{ item.is_available|yesno:'on,off' }}"></i>
+                        </button>
+                        <button class="mm-btn-icon delete" title="Delete Item" onclick="deleteMenuItem('{{ item.id }}', this)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Add the JavaScript for menu management functionality -->
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+async function toggleAvailability(itemId, button) {
+    try {
+        const response = await fetch(`/restaurant/toggle-menu-item/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const icon = button.querySelector('i');
+            const badge = button.closest('.mm-menu-item-card').querySelector('.mm-status-badge');
+            
+            icon.className = `fas fa-toggle-${data.is_available ? 'on' : 'off'}`;
+            badge.textContent = data.is_available ? 'Available' : 'Unavailable';
+            badge.className = `mm-status-badge ${data.is_available ? 'available' : 'unavailable'}`;
+            
+            showToast(data.message, 'success');
+        } else {
+            showToast(data.message || 'Failed to update availability', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred while updating availability', 'error');
+    }
+}
+
+async function deleteMenuItem(itemId, button) {
+    if (!confirm('Are you sure you want to delete this menu item?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/restaurant/delete-menu-item/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const menuItemCard = button.closest('.mm-menu-item-card');
+            menuItemCard.remove();
+            
+            showToast(data.message, 'success');
+            
+            // Update item count
+            const itemCount = document.querySelector('.item-count');
+            const currentCount = parseInt(itemCount.textContent);
+            itemCount.textContent = `${currentCount - 1} items listed`;
+        } else {
+            showToast(data.message || 'Failed to delete item', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('An error occurred while deleting the item', 'error');
+    }
+}
+
+function showToast(message, type = 'success') {
+    // You can implement your own toast notification here
+    // For now, we'll use a simple alert
+    alert(message);
+}
+</script>
+{% endblock %}

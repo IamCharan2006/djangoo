@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FoodieExpress - Restaurant Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/Restaurant_DashBoard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    {% include 'NavBar/RestaurantNavBar.html' %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block dashboard_content %}{% endblock %}
+    </main>
+</body>
+</html>

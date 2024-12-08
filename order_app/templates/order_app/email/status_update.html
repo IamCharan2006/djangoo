@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .status { color: #ff4747; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Order Status Update</h2>
+        <p>Hello {{ order.user.first_name }},</p>
+        <p>Your order #{{ order.order_number }} status has been updated to: <span class="status">{{ status }}</span></p>
+        <p>Estimated delivery time: {{ order.estimated_delivery_time|time:"g:i A" }}</p>
+        <p><a href="http://{{ request.get_host }}{% url 'order:track_order' order.id %}">Track your order</a></p>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,960 @@
+:root {
+    --bg-color: #f5f5dc;
+    --accent-color: #ff4747;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --white: #ffffff;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --gradient: linear-gradient(135deg, #ff4747 0%, #ff6b6b 100%);
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding-top: 80px;
+}
+
+/* Hero Section */
+.project-hero {
+    background: var(--text-primary);
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url('../images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    padding: 0 20px;
+}
+
+.project-hero-content {
+    max-width: 900px;
+}
+
+.project-hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.project-hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+/* Search Box */
+.project-search-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.project-search-box {
+    background: var(--white);
+    padding: 0.6rem;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.project-search-box i {
+    color: var(--accent-color);
+    font-size: 1rem;
+    margin-left: 0.6rem;
+}
+
+.project-search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    padding: 0.3rem;
+}
+
+.project-btn-search {
+    background: var(--gradient);
+    color: var(--white);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.project-btn-search:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff4747 100%);
+    box-shadow: 0 4px 15px rgba(255, 71, 71, 0.3);
+}
+
+.popular-searches {
+    margin-top: 1rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.popular-searches span {
+    color: rgba(255, 255, 255, 0.9);
+    margin-right: 0.5rem;
+    font-weight: 500;
+}
+
+.popular-searches a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    margin: 0 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.popular-searches a:hover {
+    color: var(--white);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    transform: translateY(-1px);
+}
+
+/* Categories Section */
+.project-categories {
+    padding: 4rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.project-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.project-section-header h2 {
+    font-size: 2rem;
+    color: var(--text-primary);
+}
+
+.view-all {
+    color: var(--accent-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: gap 0.3s ease;
+}
+
+.view-all:hover {
+    gap: 0.8rem;
+}
+
+.project-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.category-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+}
+
+.category-icon {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.category-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.category-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Restaurant Cards */
+.project-restaurants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.restaurant-card {
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    padding: 1rem;
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.restaurant-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rating {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--white);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.rating i {
+    color: #FFD700;  /* Golden star color */
+    font-size: 0.9rem;
+}
+
+.restaurant-info {
+    padding: 1rem 0.5rem;
+}
+
+.restaurant-info h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.cuisine {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.restaurant-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.restaurant-meta span {
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.restaurant-meta i {
+    color: var(--accent-color);
+    margin-right: 0.4rem;
+    font-size: 1rem;
+}
+
+/* Mobile App Section */
+.project-app-section {
+    background: linear-gradient(135deg, #ffe5e5 0%, #f5f5dc 100%);
+    padding: 6rem 2rem;
+    margin: 4rem 0;
+}
+
+.project-app-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.app-text {
+    padding-right: 2rem;
+}
+
+.app-text h2 {
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.app-text p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.app-features {
+    list-style: none;
+    margin-bottom: 2.5rem;
+}
+
+.app-features li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+.app-features i {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+}
+
+.app-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.app-btn {
+    transition: transform 0.3s ease;
+}
+
+.app-btn:hover {
+    transform: translateY(-5px);
+}
+
+.app-btn img {
+    height: 48px;
+    object-fit: contain;
+}
+
+.app-image {
+    position: relative;
+    text-align: center;
+}
+
+.app-image img {
+    max-width: 35%;
+    height: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.app-image-overlay {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    height: 80%;
+    background: rgba(255, 71, 71, 0.2);
+    border-radius: 30px;
+    filter: blur(40px);
+    opacity: 0.2;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .project-app-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 3rem;
+    }
+
+    .app-text {
+        padding-right: 0;
+    }
+
+    .app-features li {
+        justify-content: center;
+    }
+
+    .app-buttons {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-text h2 {
+        font-size: 2rem;
+    }
+
+    .app-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* Footer Section */
+.project-footer {
+    background: var(--text-primary);
+    color: var(--white);
+    padding: 4rem 2rem 1rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+}
+
+.footer-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--white);
+}
+
+.footer-section p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.social-links a {
+    color: var(--white);
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--accent-color);
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-section ul li a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+    color: var(--accent-color);
+}
+
+.footer-section i {
+    margin-right: 0.5rem;
+    color: var(--accent-color);
+}
+
+.footer-bottom {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .footer-section {
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .footer-section ul {
+        padding: 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .project-hero-content h1 {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .project-search-box {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 25px;
+    }
+    
+    .project-btn-search {
+        width: 100%;
+    }
+    
+    .project-app-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .app-buttons {
+        justify-content: center;
+    }
+    
+    .filter-buttons {
+        display: none;
+    }
+    
+    .project-search-box i {
+        margin-left: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .popular-searches {
+        display: none;
+    }
+}
+
+/* Ensure styles for the "How It Works" section are included */
+.project-how-it-works {
+    background: var(--white);
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.project-how-it-works h2 {
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+}
+
+.project-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.project-step-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.project-step-card:hover {
+    transform: translateY(-10px);
+}
+
+.project-step-icon {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.project-step-card h3 {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.project-step-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Add these styles for category cards */
+.category-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.category-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Add hover effect for category icon */
+.category-card:hover .category-icon {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+/* Add responsive styles */
+@media (max-width: 768px) {
+    .project-categories {
+        padding: 2rem 1rem;
+    }
+    
+    .project-section-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+}
+
+/* Add these styles for filter buttons */
+.filter-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filter-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+.filter-btn.active {
+    color: var(--accent-color);
+    position: relative;
+}
+
+.filter-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--accent-color);
+    border-radius: 2px;
+}
+
+/* Add hover effects for restaurant cards */
+.restaurant-meta i {
+    color: var(--accent-color);
+    margin-right: 0.5rem;
+}
+
+/* Improve responsive design */
+@media (max-width: 768px) {
+    .project-restaurants-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .restaurant-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+.project-featured-restaurants {
+    padding: 4rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    background: var(--white);
+}
+
+/* User-specific styles */
+.user-welcome-banner {
+    background: var(--gradient);
+    color: var(--white);
+    padding: 1rem 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.user-welcome-banner h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.user-welcome-banner p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Add user-specific indicators to restaurant cards when logged in */
+.user-logged-in .restaurant-card {
+    position: relative;
+}
+
+.user-logged-in .restaurant-card::before {
+    content: '⭐';
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--white);
+    padding: 0.3rem;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Login prompt styles */
+.login-prompt {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 71, 71, 0.1);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.login-to-order {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.login-to-order:hover {
+    color: var(--text-primary);
+}
+
+/* Style for login button in search box */
+a.project-btn-search {
+    text-decoration: none;
+    display: inline-block;
+    background: var(--gradient);
+    color: var(--white);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+a.project-btn-search:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff4747 100%);
+    box-shadow: 0 4px 15px rgba(255, 71, 71, 0.3);
+}
+
+/* Restaurant Card Links */
+.restaurant-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.restaurant-card {
+    transition: transform 0.3s ease;
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Make sure buttons remain clickable */
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+/* Add Menu Item Form Styles */
+.add-menu-item {
+    max-width: 800px;
+    margin: 120px auto 2rem;  /* Increased top margin to account for fixed navbar */
+    padding: 2.5rem;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.form-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.form-header h1 {
+    font-size: 2rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-header .subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(255, 71, 71, 0.1);
+    outline: none;
+}
+
+/* Image Upload Styles */
+.image-upload-container {
+    position: relative;
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.image-upload-container:hover {
+    border-color: var(--accent-color);
+    background-color: rgba(255, 71, 71, 0.02);
+}
+
+.image-upload-help {
+    color: var(--text-secondary);
+}
+
+.image-upload-help i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--accent-color);
+}
+
+.file-requirements {
+    display: block;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.form-control-file {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Toggle Switch Styles */
+.availability-toggle {
+    grid-column: 1 / -1;
+    margin-top: 1rem;
+}
+
+.toggle-label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.toggle-slider {
+    position: relative;
+    width: 50px;
+    height: 26px;
+    background-color: #e0e0e0;
+    border-radius: 13px;
+    margin-right: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-slider:before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s ease;
+}
+
+.toggle-slider.active {
+    background-color: var(--accent-color);
+}
+
+.toggle-slider.active:before {
+    transform: translateX(26px);
+}

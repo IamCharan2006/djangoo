@@ -1,0 +1,94 @@
+{% extends 'ProjectHomePage.html' %}
+{% load static %}
+
+{% block title %}FoodieExpress - Welcome {{ user.username }}{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/user-dashboard.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<!-- User-specific content -->
+<div class="user-welcome-banner">
+    <h2>Welcome back, {{ user.username }}! 🎉</h2>
+    <p>Ready to order your favorite food?</p>
+</div>
+
+<!-- Top Restaurants Section -->
+{% if top_restaurants %}
+<section class="project-featured-restaurants">
+    <div class="project-section-header">
+        <h2>Popular Restaurants</h2>
+        <div class="filter-buttons">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Trending</button>
+            <button class="filter-btn">New</button>
+            <a href="{% url 'user:restaurants' %}" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="project-restaurants-grid">
+        {% for restaurant in top_restaurants %}
+        <div class="restaurant-card">
+            <a href="{% url 'restaurant:detail' restaurant.id %}" class="restaurant-link">
+                <div class="restaurant-image">
+                    {% if restaurant.image %}
+                        <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}">
+                    {% else %}
+                        <img src="{% static 'images/defaults/default_restaurant.jpg' %}" alt="{{ restaurant.name }}">
+                    {% endif %}
+                    <div class="rating">
+                        <i class="fas fa-star"></i> {{ restaurant.rating|default:"0.0" }}
+                    </div>
+                </div>
+                <div class="restaurant-info">
+                    <h3>{{ restaurant.name }}</h3>
+                    <p class="cuisine">{{ restaurant.cuisine_types }}</p>
+                    <div class="restaurant-meta">
+                        <span><i class="fas fa-clock"></i> {{ restaurant.delivery_time }} mins</span>
+                        <span><i class="fas fa-motorcycle"></i> 
+                            {% if restaurant.delivery_fee == 0 %}
+                                Free delivery
+                            {% else %}
+                                ₹{{ restaurant.delivery_fee }} delivery
+                            {% endif %}
+                        </span>
+                        <span><i class="fas fa-rupee-sign"></i> ₹{{ restaurant.minimum_order }} for two</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Recent Orders Section -->
+{% if recent_orders %}
+<section class="recent-orders">
+    <div class="section-header">
+        <h2>Recent Orders</h2>
+        <a href="{% url 'user:orders' %}" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="orders-grid">
+        {% for order in recent_orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <h3>Order #{{ order.id }}</h3>
+                <span class="order-status {{ order.status }}">{{ order.status }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{# Include all the content from ProjectHomePage.html #}
+{{ block.super }}
+{% endblock %}
+
+{# Don't override these blocks, let them come from ProjectHomePage.html #}
+{% block hero %}{{ block.super }}{% endblock %}
+{% block featured_categories %}{{ block.super }}{% endblock %}
+{% block featured_restaurants %}{{ block.super }}{% endblock %}
+{% block app_section %}{{ block.super }}{% endblock %}

@@ -1,0 +1,385 @@
+/* General Body Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Homepage Navbar Styles */
+.homepage-navbar {
+    background: var(--gradient);
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(255, 71, 71, 0.2);
+}
+
+.homepage-nav-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.homepage-logo {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.homepage-logo span {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.homepage-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.homepage-nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.homepage-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.homepage-nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Profile Section */
+.homepage-profile-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.homepage-notifications {
+    position: relative;
+    cursor: pointer;
+}
+
+.homepage-notifications i {
+    color: white;
+    font-size: 18px;
+}
+
+.homepage-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: white;
+    color: var(--accent-color);
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.homepage-profile-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.homepage-profile-img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .homepage-nav-links {
+        display: none;
+    }
+    
+    .homepage-profile-section {
+        gap: 10px;
+    }
+}
+
+/* Auth Buttons */
+.homepage-auth-buttons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.homepage-btn {
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.homepage-btn-primary {
+    background-color: white;
+    color: var(--accent-color);
+}
+
+.homepage-btn-primary:hover {
+    background-color: #f8f8f8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 71, 71, 0.2);
+}
+
+.homepage-btn-secondary {
+    background-color: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+}
+
+.homepage-btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Profile Dropdown */
+.homepage-profile-dropdown {
+    position: relative;
+}
+
+.homepage-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 120%;
+    background-color: white;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 8px 0;
+}
+
+.homepage-profile-dropdown:hover .homepage-dropdown-content {
+    display: block;
+}
+
+.homepage-dropdown-content a {
+    color: #333;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s;
+}
+
+.homepage-dropdown-content a:hover {
+    background-color: #f8f8f8;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 8px 0;
+}
+
+.logout-link {
+    color: #ff6347 !important;
+}
+
+.logout-link:hover {
+    background-color: #fff5f5 !important;
+}
+
+/* Responsive Design for Auth Buttons */
+@media (max-width: 768px) {
+    .homepage-auth-buttons {
+        display: flex;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .homepage-btn {
+        padding: 6px 15px;
+        font-size: 13px;
+    }
+
+    .homepage-btn i {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .homepage-auth-buttons {
+        gap: 8px;
+    }
+
+    .homepage-btn {
+        padding: 5px 12px;
+        font-size: 12px;
+    }
+}
+
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.user-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: var(--white);
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+/* Add these new styles */
+.user-dropdown.active .user-dropdown-content {
+    display: block;
+}
+
+.user-toggle {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.user-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Add these styles to your existing Navbar.css */
+.logout-link {
+    display: block;
+    padding: 12px 20px;
+    color: #ff6347 !important;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.logout-link:hover {
+    background-color: #fff5f5;
+}
+
+.homepage-dropdown-content {
+    min-width: 200px;
+}
+
+.homepage-dropdown-content a {
+    display: block;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.homepage-dropdown-content a:hover {
+    background-color: #f8f8f8;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 8px 0;
+}
+
+#logout-form {
+    margin: 0;
+    padding: 0;
+}
+
+/* Update existing dropdown styles */
+.homepage-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.homepage-dropbtn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+.homepage-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 1000;
+    margin-top: 8px;
+}
+
+.homepage-dropdown-content a {
+    color: #333;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.homepage-dropdown-content a:hover {
+    background-color: #f8f8f8;
+}
+
+.logout-link {
+    color: #ff6347 !important;
+}
+
+.logout-link:hover {
+    background-color: #fff5f5 !important;
+}
+
+/* Add animation */
+.homepage-dropdown-content {
+    transform-origin: top right;
+    animation: dropdownFade 0.2s ease;
+}
+
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

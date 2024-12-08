@@ -1,0 +1,100 @@
+{% extends 'ProjectHomePage.html' %}
+{% load static %}
+
+{% block title %}FoodieExpress - Track Order{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/track_order.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<section class="tracking-page">
+    <div class="tracking-container">
+        <div class="tracking-header">
+            <h1>Track Order #{{ order.order_number }}</h1>
+            <p class="estimated-time">
+                Estimated Delivery by {{ order.estimated_delivery_time|time:"g:i A" }}
+            </p>
+        </div>
+
+        <div class="tracking-status">
+            <div class="status-timeline">
+                {% for status, label in order.STATUS_CHOICES %}
+                <div class="status-point {% if order.status == status %}active{% endif %} {% if forloop.counter0 < order.STATUS_CHOICES|length|add:"-1" %}with-line{% endif %}">
+                    <div class="status-icon">
+                        {% if status == 'PENDING' %}
+                            <i class="fas fa-clock"></i>
+                        {% elif status == 'CONFIRMED' %}
+                            <i class="fas fa-check-circle"></i>
+                        {% elif status == 'PREPARING' %}
+                            <i class="fas fa-utensils"></i>
+                        {% elif status == 'OUT_FOR_DELIVERY' %}
+                            <i class="fas fa-motorcycle"></i>
+                        {% elif status == 'DELIVERED' %}
+                            <i class="fas fa-home"></i>
+                        {% elif status == 'CANCELLED' %}
+                            <i class="fas fa-times-circle"></i>
+                        {% endif %}
+                    </div>
+                    <div class="status-label">{{ label }}</div>
+                    {% if order.status == status %}
+                    <div class="status-time">{{ order.updated_at|time:"g:i A" }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="order-details">
+            <div class="restaurant-info">
+                <h2>Order Details</h2>
+                <div class="restaurant-meta">
+                    <p><i class="fas fa-store"></i> {{ order.items.first.menu_item.restaurant.name }}</p>
+                    <p><i class="fas fa-map-marker-alt"></i> {{ order.delivery_address }}</p>
+                </div>
+            </div>
+
+            <div class="order-items">
+                {% for item in order.items.all %}
+                <div class="order-item">
+                    <div class="item-info">
+                        <span class="item-quantity">{{ item.quantity }}x</span>
+                        <span class="item-name">{{ item.menu_item.name }}</span>
+                    </div>
+                    <span class="item-price">₹{{ item.get_total }}</span>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="order-summary">
+                <div class="summary-item">
+                    <span>Subtotal</span>
+                    <span>₹{{ order.get_subtotal }}</span>
+                </div>
+                <div class="summary-item">
+                    <span>Delivery Fee</span>
+                    <span>₹{{ order.delivery_fee }}</span>
+                </div>
+                <div class="summary-item total">
+                    <span>Total</span>
+                    <span>₹{{ order.get_total }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tracking-actions">
+            <a href="{% url 'restaurants' %}" class="browse-btn">
+                <i class="fas fa-utensils"></i>
+                Browse More Restaurants
+            </a>
+            {% if order.status != 'DELIVERED' and order.status != 'CANCELLED' %}
+            <button class="support-btn" onclick="window.location.href='#'">
+                <i class="fas fa-headset"></i>
+                Contact Support
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %} 
